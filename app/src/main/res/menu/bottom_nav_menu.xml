@@ -11,6 +11,11 @@
         android:icon="@drawable/ic_dashboard_black_24dp"
         android:title="@string/title_dashboard" />
 
+    <item
+        android:id="@+id/navigation_book"
+        android:icon="@drawable/baseline_menu_book_black_18dp"
+        android:title="Books" />
+
 
 
 </menu>

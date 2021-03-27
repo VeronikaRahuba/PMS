@@ -16,5 +16,10 @@
         android:name="com.example.girafferest.ui.dashboard.GraphFragment"
         android:label="@string/title_dashboard"
         tools:layout="@layout/fragment_dashboard" />
+    <fragment
+        android:id="@+id/navigation_book"
+        android:name="com.example.girafferest.ui.book.BookFragment"
+        android:label="Books"
+        tools:layout="@layout/fragment_book" />
 
 </navigation>
