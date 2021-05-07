@@ -1,7 +1,4 @@
 package com.example.girafferest.ui.picture
-
-//import Maksym.Dudka.uakpicomsysio_8106.R
-import android.R.attr.path
 import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
@@ -22,7 +19,7 @@ import com.bumptech.glide.request.transition.Transition
 import com.example.girafferest.R
 
 
-class PictureFragment : Fragment() {
+class PhotoFragment : Fragment() {
 
     private lateinit var list: RecyclerView
     private val pictures = ArrayList<ImageView>()
@@ -34,7 +31,7 @@ class PictureFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_picture_list, container, false)
+        return inflater.inflate(R.layout.fragment_photo_list, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -49,11 +46,11 @@ class PictureFragment : Fragment() {
 
         list.layoutManager = spannedGridLayoutManager
 
-        var adapter = MyPictureAdapter(requireContext(), pictures)
+        var adapter = MyPhotoAdapter(requireContext(), pictures)
 
         spannedGridLayoutManager.spanSizeLookup =
             SpannedGridLayoutManager.SpanSizeLookup { position ->
-                if (position % 9 == 0 ) {
+                if (position % 9 == 4 ) {
                     SpanSize(2, 2)
                 } else {
                     SpanSize(1, 1)
@@ -80,7 +77,7 @@ class PictureFragment : Fragment() {
                             ) {
                                 image.setImageBitmap(resource)
                                 pictures.add(image)
-                                adapter = MyPictureAdapter(requireContext(), pictures)
+                                adapter = MyPhotoAdapter(requireContext(), pictures)
                                 list.adapter = adapter
 
                                 println("test ${pictures[pictures.size - 1]}")

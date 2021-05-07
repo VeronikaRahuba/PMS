@@ -21,5 +21,9 @@
         android:name="com.example.girafferest.ui.book.BookFragment"
         android:label="Books"
         tools:layout="@layout/fragment_book" />
-
+    <fragment
+        android:id="@+id/navigation_picture"
+        android:name="com.example.girafferest.ui.picture.PhotoFragment"
+        android:label="Pictures"
+        tools:layout="@layout/fragment_photo_list" />
 </navigation>

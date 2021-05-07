@@ -15,6 +15,10 @@
         android:id="@+id/navigation_book"
         android:icon="@drawable/baseline_menu_book_black_18dp"
         android:title="Books" />
+    <item
+        android:id="@+id/navigation_picture"
+        android:icon="@drawable/picture_camera"
+        android:title="Photos" />
 
 
 

@@ -8,10 +8,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.girafferest.R
 
 
-class MyPictureAdapter(
+class MyPhotoAdapter(
     private val context: Context,
     private var values: List<ImageView>
-) : RecyclerView.Adapter<MyPictureAdapter.MyPictureViewHolder>() {
+) : RecyclerView.Adapter<MyPhotoAdapter.MyPictureViewHolder>() {
 
     private lateinit var list: RecyclerView
 
@@ -27,7 +27,7 @@ class MyPictureAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyPictureViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.fragment_picture, parent, false)
+            .inflate(R.layout.fragment_photo, parent, false)
         return MyPictureViewHolder(view)
     }
 

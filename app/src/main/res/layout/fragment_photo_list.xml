@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.picture.PictureFragment">
+    tools:context=".ui.picture.PhotoFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/pictures"
