@@ -5,10 +5,13 @@ import android.os.Bundle
 import android.view.View
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.example.flatdialoglibrary.dialog.FlatDialog
+import com.example.girafferest.ui.book.Book
 import com.intrusoft.scatter.PieChart
 import com.jjoe64.graphview.GraphView
 
@@ -45,7 +48,10 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
+//    fun onDeleteBoo(view: View){
+//
+//
+//    }
 
 
     fun randomValue(a: Int): Int = when ((0..6).random()) {

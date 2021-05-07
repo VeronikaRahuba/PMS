@@ -1,6 +1,6 @@
 package com.example.girafferest.ui.book
 
-//import Maksym.Dudka.uakpicomsysio_8106.R
+
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.textclassifier.TextLanguage

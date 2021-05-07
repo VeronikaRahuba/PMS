@@ -1,17 +1,13 @@
 package com.example.girafferest.ui.book
 
-//import Maksym.Dudka.uakpicomsysio_8106.ui.film.MyFilmRecyclerViewAdapter
-//import Maksym.Dudka.uakpicomsysio_8106.ui.film.SwipeToDeleteCallback
 
-import  com.example.girafferest.ui.book.SwipeToDeleteCallback
-import  com.example.girafferest.ui.book.MyBookRecyclerViewAdapter
-
+import android.app.AlertDialog
+import android.app.Dialog
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,11 +15,11 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.LinearLayout
 import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.flatdialoglibrary.dialog.FlatDialog
 import com.example.girafferest.R
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.android.material.snackbar.Snackbar
@@ -63,7 +59,7 @@ class BookFragment : Fragment() {
         val arr = bookContainer.search
 
         adapter = MyBookRecyclerViewAdapter(requireContext(), arr) { item ->
-          //  println("test"+ item)
+            //  println("test"+ item)
             if (item.isbn13 != null && item.isbn13!!.isNotEmpty()) {
                 val id = getResId(item.isbn13!!, R.string::class.java)
                 val jsonText = requireContext().resources.getString(id)
@@ -75,27 +71,32 @@ class BookFragment : Fragment() {
         view.findViewById<RecyclerView>(R.id.list).adapter = adapter
         enableSwipeToDeleteAndUndo()
         addButton = requireView().findViewById(R.id.add)
-        addButton.setOnClickListener {
-            val flatDialog = FlatDialog(requireContext())
-            flatDialog.setTitle("New book")
-                .setFirstTextFieldHint("Title")
-                .setSecondTextFieldHint("Price")
-                .setLargeTextFieldHint("Description")
-                .setFirstButtonText("Add")
-                .setSecondButtonText("Cancel")
-                .withFirstButtonListner {
-                    val search = Book()
-                    search.title = flatDialog.firstTextField
-                    search.subtitle = flatDialog.secondTextField
-                    search.price=flatDialog.largeTextField
-                    bookContainer.search.add(search)
-                    flatDialog.dismiss()
-                }
-                .withSecondButtonListner {
-                    flatDialog.dismiss()
-                }
-                .show()
+        addButton.setOnClickListener { withEditText(addButton)
         }
+    }
+
+
+    fun withEditText(view: View) {
+        val builder = AlertDialog.Builder(requireContext())
+        val inflater = layoutInflater
+        builder.setTitle("Add new book")
+        val dialogLayout = inflater.inflate(R.layout.alert_dialog_with_edittext, null)
+        val title = dialogLayout.findViewById<EditText>(R.id.title)
+        val subtitle = dialogLayout.findViewById<EditText>(R.id.subtitle)
+        var price = dialogLayout.findViewById<EditText>(R.id.price)
+        builder.setView(dialogLayout)
+        builder.setPositiveButton("Add") { dialogInterface, i ->
+            run {
+                val search = Book()
+                search.title = title.text.toString()
+                search.subtitle = subtitle.text.toString()
+                search.price = price.text.toString()
+                bookContainer.search.add(search)
+                dialogInterface.cancel()
+            }
+        }
+        builder.setNegativeButton("Cancel") { dialog, which -> dialog.cancel() }
+        builder.show()
     }
 
 
@@ -111,7 +112,7 @@ class BookFragment : Fragment() {
 
 
         searchField = requireView().findViewById(R.id.filter)
-      searchField.addTextChangedListener(object : TextWatcher {
+        searchField.addTextChangedListener(object : TextWatcher {
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
 
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
