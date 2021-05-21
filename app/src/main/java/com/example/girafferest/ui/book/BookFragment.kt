@@ -23,6 +23,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.girafferest.R
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.android.material.snackbar.Snackbar
+import com.squareup.moshi.JsonAdapter
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.Types
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import java.io.IOException
 import java.lang.reflect.Field
 
 
@@ -54,24 +61,15 @@ class BookFragment : Fragment() {
             }
         }
 
-        initBook()
+        //initBook()
         initSearchField()
         val arr = bookContainer.search
 
-        adapter = MyBookRecyclerViewAdapter(requireContext(), arr) { item ->
-            //  println("test"+ item)
-            if (item.isbn13 != null && item.isbn13!!.isNotEmpty()) {
-                val id = getResId(item.isbn13!!, R.string::class.java)
-                val jsonText = requireContext().resources.getString(id)
-                val intent = Intent(requireContext(), BookDetailsActivity::class.java)
-                intent.putExtra("info", jsonText)
-                startActivity(intent)
-            }
-        }
-        view.findViewById<RecyclerView>(R.id.list).adapter = adapter
+
         enableSwipeToDeleteAndUndo()
         addButton = requireView().findViewById(R.id.add)
-        addButton.setOnClickListener { withEditText(addButton)
+        addButton.setOnClickListener {
+            withEditText(addButton)
         }
     }
 
@@ -100,17 +98,34 @@ class BookFragment : Fragment() {
     }
 
 
-    private fun initBook() {
+    private fun initBook(books: List<Book>) {
         val mapper = ObjectMapper()
-        val jsonText = requireView().resources.getString(R.string.json_books)
         //  val jsonText = requireView().resources.getString(R.string.json_book)
-        bookContainer = mapper.readValue(jsonText, BookContainer::class.java)
+        bookContainer.search = books.toMutableList()
+        adapter = MyBookRecyclerViewAdapter(requireContext(), books) {
+            val client = OkHttpClient()
+
+            val request = Request.Builder()
+                .url("https://api.itbook.store/1.0/books/${it.isbn13!!.replace("a", "")}")
+                .build()
+
+            client.newCall(request).execute().use { response ->
+                if (!response.isSuccessful) throw IOException("Unexpected code $response")
+
+                for ((name, value) in response.headers) {
+                    println("$name: $value")
+                }
+
+                val intent = Intent(requireContext(), BookDetailsActivity::class.java)
+                intent.putExtra("info", response.body!!.string())
+                startActivity(intent)
+            }
+        }
+        view.findViewById<RecyclerView>(R.id.list).adapter = adapter
     }
 
 
     private fun initSearchField() {
-
-
         searchField = requireView().findViewById(R.id.filter)
         searchField.addTextChangedListener(object : TextWatcher {
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
@@ -118,7 +133,33 @@ class BookFragment : Fragment() {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
 
             override fun afterTextChanged(s: Editable) {
-                filter(s.toString())
+                if (s.toString().length > 2) {
+                    val client = OkHttpClient()
+                    val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
+                    val gistJsonAdapter = moshi.adapter(Gist::class.java)
+
+
+
+
+                    val request = Request.Builder()
+                        .url("https://api.itbook.store/1.0/search/${s.toString()}")
+                        .build()
+
+                    client.newCall(request).execute().use { response ->
+                        if (!response.isSuccessful) throw IOException("Unexpected code $response")
+
+                        /*for ((name, value) in response.headers) {
+                            println("$name: $value")
+                        }*/
+
+                        //println(response.body!!.string())
+                        val gist = gistJsonAdapter.fromJson(response.body!!.source())
+                        initBook(gist!!.books)
+                        println(gist)
+
+
+                    }
+                }
             }
         })
     }

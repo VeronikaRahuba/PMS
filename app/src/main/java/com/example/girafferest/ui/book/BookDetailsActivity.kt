@@ -7,6 +7,7 @@ import android.view.textclassifier.TextLanguage
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import com.bumptech.glide.Glide
 import com.example.girafferest.R
 import com.fasterxml.jackson.databind.ObjectMapper
 import java.lang.reflect.Field
@@ -24,8 +25,8 @@ class BookDetailsActivity : AppCompatActivity() {
     private lateinit var rating: TextView
     private lateinit var desc: TextView
     private lateinit var price: TextView
-    
-    
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_books)
@@ -37,9 +38,7 @@ class BookDetailsActivity : AppCompatActivity() {
         val jsonText = intent.extras!!["info"].toString()
         info = mapper.readValue(jsonText,BookNewJson::class.java)
         image = findViewById(R.id.image)
-        val drawable = getResId(info.image!!.replace(".jpg", ""), R.drawable::class.java)
-        if (drawable != -1)
-            image.setImageDrawable(this.resources.getDrawable(drawable))
+        Glide.with(this).load(info.image).into(image)
 
         year = findViewById(R.id.year)
         year.text = year.text.toString() +  " "  + info.year
