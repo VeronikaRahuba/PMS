@@ -64,7 +64,7 @@ class PhotoFragment : Fragment() {
 
 
             val request = Request.Builder()
-                .url("https://pixabay.com/api/?key=19193969-87191e5db266905fe8936d565&q=hot+summer&image_type=photo&per_page=24")
+                .url("https://pixabay.com/api/?key=19193969-87191e5db266905fe8936d565&q=night+city&image_type=photo&per_page=27")
                 .build()
 
             client.newCall(request).execute().use { response ->
