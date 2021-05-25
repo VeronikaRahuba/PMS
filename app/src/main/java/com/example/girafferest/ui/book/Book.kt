@@ -1,5 +1,6 @@
 package com.example.girafferest.ui.book
 
+import android.graphics.Bitmap
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.squareup.moshi.JsonClass
 
